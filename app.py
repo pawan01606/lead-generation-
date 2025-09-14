@@ -4,30 +4,32 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
+# ------------------------
+# Flask App Config
+# ------------------------
 app = Flask(__name__)
 
-# ✅ Secret key (from env on Render, fallback for local)
+# SECRET_KEY for Render (env) or fallback
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
 
-# ✅ Database (Render Postgres via DATABASE_URL, fallback = local sqlite)
+# DATABASE_URL for Render Postgres, fallback sqlite
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL',
     'sqlite:///database.db'
 )
 
 db = SQLAlchemy(app)
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# -----------------------
-# Models
-# -----------------------
+# ------------------------
+# Database Models
+# ------------------------
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    role = db.Column(db.String(20), nullable=False)  # "admin" or "user"
+    role = db.Column(db.String(20), nullable=False)  # admin or user
     password_hash = db.Column(db.String(200), nullable=False)
 
     def set_password(self, password):
@@ -57,15 +59,16 @@ class Lead(db.Model):
     follow_up_date = db.Column(db.String(20))
     current_status = db.Column(db.String(100))
 
-
+# ------------------------
+# User loader
+# ------------------------
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-
-# -----------------------
-# Create tables + default admin
-# -----------------------
+# ------------------------
+# Initialize DB + default admin
+# ------------------------
 with app.app_context():
     db.create_all()
     if not User.query.filter_by(username="admin").first():
@@ -75,14 +78,12 @@ with app.app_context():
         db.session.commit()
         print("✅ Default admin user created (admin / admin123)")
 
-
-# -----------------------
+# ------------------------
 # Routes
-# -----------------------
+# ------------------------
 @app.route("/")
 def index():
     return redirect(url_for("login"))
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -97,20 +98,17 @@ def login():
             flash("Invalid username or password")
     return render_template("login.html")
 
-
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("login"))
 
-
 @app.route("/dashboard")
 @login_required
 def dashboard():
     leads = Lead.query.all()
     return render_template("dashboard.html", leads=leads, role=current_user.role)
-
 
 @app.route("/add_lead", methods=["GET", "POST"])
 @login_required
@@ -138,14 +136,13 @@ def add_lead():
 
     return render_template("add_lead.html")
 
-
 @app.route("/followup/<int:lead_id>", methods=["GET", "POST"])
 @login_required
 def followup(lead_id):
     lead = Lead.query.get_or_404(lead_id)
 
     if request.method == "POST":
-        # ✅ both admin and user can update follow-up
+        # Both admin and user can update follow-up
         lead.follow_up_date = request.form.get("follow_up_date")
         lead.current_status = request.form.get("current_status")
         db.session.commit()
@@ -154,9 +151,8 @@ def followup(lead_id):
 
     return render_template("followup.html", lead=lead)
 
-
-# -----------------------
+# ------------------------
 # Run app (local dev only)
-# -----------------------
+# ------------------------
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,9 +1,8 @@
-# Ignore system / temp files
 AppData/
 __pycache__/
 *.pyc
 database.db
 *.sqlite
 *.log
-*.DS_Store
+.DS_Store
 venv/
