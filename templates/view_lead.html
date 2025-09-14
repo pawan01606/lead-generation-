@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h3>Lead #{{ lead.id }}</h3>
+  <div class="card mb-3">
+    <div class="card-body">
+      <p><strong>Branch:</strong> {{ lead.branch_name }}</p>
+      <p><strong>Customer:</strong> {{ lead.customer_name }}</p>
+      <p><strong>Contact:</strong> {{ lead.contact_no }}</p>
+      <p><strong>Date of Lead:</strong> {{ lead.date_of_lead }}</p>
+      <p><strong>Monthly Income:</strong> {{ lead.monthly_income }}</p>
+      <hr>
+      <p><strong>Lead Source:</strong> {{ lead.lead_source }}</p>
+      <p><strong>Purpose:</strong> {{ lead.purpose_of_loan }}</p>
+      <p><strong>Loan Amount:</strong> {{ lead.loan_amount }}</p>
+      <p><strong>Interest:</strong> {{ lead.interest_or_not }}</p>
+      <hr>
+      <p><strong>Follow-up Date:</strong> {{ lead.follow_up_date }}</p>
+      <p><strong>Current Status:</strong> {{ lead.current_status }}</p>
+
+      <div class="mt-3">
+        <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('edit_followup', lead_id=lead.id) }}">Edit FollowUp</a>
+        {% if current_user.role == 'admin' %}
+          <a class="btn btn-sm btn-outline-warning" href="{{ url_for('edit_lead', lead_id=lead.id) }}">Edit Lead</a>
+        {% endif %}
+        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('dashboard') }}">Back</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

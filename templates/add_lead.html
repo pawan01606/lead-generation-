@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <h3>{% if edit %}Edit Lead{% else %}Add Lead{% endif %}</h3>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="row">
+      <div class="col-md-6 mb-3">{{ form.branch_name.label }}{{ form.branch_name(class="form-control") }}</div>
+      <div class="col-md-6 mb-3">{{ form.customer_name.label }}{{ form.customer_name(class="form-control") }}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-3">{{ form.contact_no.label }}{{ form.contact_no(class="form-control") }}</div>
+      <div class="col-md-4 mb-3">{{ form.date_of_lead.label }}{{ form.date_of_lead(class="form-control") }}</div>
+      <div class="col-md-4 mb-3">{{ form.monthly_income.label }}{{ form.monthly_income(class="form-control") }}</div>
+    </div>
+
+    <hr>
+    <div class="mb-3">{{ form.lead_source.label }}{{ form.lead_source(class="form-control") }}</div>
+    <div class="mb-3">{{ form.purpose_of_loan.label }}{{ form.purpose_of_loan(class="form-control", rows=3) }}</div>
+    <div class="row">
+      <div class="col-md-6 mb-3">{{ form.loan_amount.label }}{{ form.loan_amount(class="form-control") }}</div>
+      <div class="col-md-6 mb-3">{{ form.interest_or_not.label }}{{ form.interest_or_not(class="form-control") }}</div>
+    </div>
+
+    <hr>
+    <div class="row">
+      <div class="col-md-6 mb-3">{{ form.follow_up_date.label }}{{ form.follow_up_date(class="form-control") }}</div>
+      <div class="col-md-6 mb-3">{{ form.current_status.label }}{{ form.current_status(class="form-control", rows=2) }}</div>
+    </div>
+
+    <div class="mb-3">{{ form.submit(class="btn btn-success") }}</div>
+  </form>
+{% endblock %}
