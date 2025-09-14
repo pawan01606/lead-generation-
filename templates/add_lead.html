@@ -1,32 +1,53 @@
 {% extends "base.html" %}
+{% block title %}Add Lead - LeadsApp{% endblock %}
+
 {% block content %}
-  <h3>{% if edit %}Edit Lead{% else %}Add Lead{% endif %}</h3>
-  <form method="post">
-    {{ form.hidden_tag() }}
-    <div class="row">
-      <div class="col-md-6 mb-3">{{ form.branch_name.label }}{{ form.branch_name(class="form-control") }}</div>
-      <div class="col-md-6 mb-3">{{ form.customer_name.label }}{{ form.customer_name(class="form-control") }}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-4 mb-3">{{ form.contact_no.label }}{{ form.contact_no(class="form-control") }}</div>
-      <div class="col-md-4 mb-3">{{ form.date_of_lead.label }}{{ form.date_of_lead(class="form-control") }}</div>
-      <div class="col-md-4 mb-3">{{ form.monthly_income.label }}{{ form.monthly_income(class="form-control") }}</div>
-    </div>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Add New Lead</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('add_lead') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.branch_name.label(class="form-label") }}
+                            {{ form.branch_name(class="form-control", placeholder="Enter Branch Name") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.customer_name.label(class="form-label") }}
+                            {{ form.customer_name(class="form-control", placeholder="Enter Customer Name") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.contact_no.label(class="form-label") }}
+                            {{ form.contact_no(class="form-control", placeholder="Enter Contact Number") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.loan_type.label(class="form-label") }}
+                            {{ form.loan_type(class="form-control", placeholder="Enter Loan Type") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.loan_amount.label(class="form-label") }}
+                            {{ form.loan_amount(class="form-control", placeholder="Enter Loan Amount") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.status.label(class="form-label") }}
+                            {{ form.status(class="form-select") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.follow_up.label(class="form-label") }}
+                            {{ form.follow_up(class="form-control", placeholder="Enter Follow-up Info") }}
+                        </div>
 
-    <hr>
-    <div class="mb-3">{{ form.lead_source.label }}{{ form.lead_source(class="form-control") }}</div>
-    <div class="mb-3">{{ form.purpose_of_loan.label }}{{ form.purpose_of_loan(class="form-control", rows=3) }}</div>
-    <div class="row">
-      <div class="col-md-6 mb-3">{{ form.loan_amount.label }}{{ form.loan_amount(class="form-control") }}</div>
-      <div class="col-md-6 mb-3">{{ form.interest_or_not.label }}{{ form.interest_or_not(class="form-control") }}</div>
+                        <button type="submit" class="btn btn-success">Add Lead</button>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <hr>
-    <div class="row">
-      <div class="col-md-6 mb-3">{{ form.follow_up_date.label }}{{ form.follow_up_date(class="form-control") }}</div>
-      <div class="col-md-6 mb-3">{{ form.current_status.label }}{{ form.current_status(class="form-control", rows=2) }}</div>
-    </div>
-
-    <div class="mb-3">{{ form.submit(class="btn btn-success") }}</div>
-  </form>
+</div>
 {% endblock %}
